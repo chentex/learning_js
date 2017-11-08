@@ -1,9 +1,9 @@
-var a = 5;
-a++;
-a;
-++a;
+var a = 5
+a++
 console.log(a)
-var s = "this is a string \'s that has stuff\
+++a
+console.log(a)
+var s = "this is a string 's that has stuff\
 and enters."
 console.log(s)
 console.log(s.length)
