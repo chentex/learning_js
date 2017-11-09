@@ -369,3 +369,193 @@ console.log(geng());
 console.log(genh());
 console.log(geng());
 console.log(genh());
+
+console.log("------------gensymff----------");
+function gensymff(start) {
+  return function (prefix) {
+    let gen = from(start);
+    return function() {
+      return `${prefix}${gen()}`;
+    }
+  }
+}
+
+let symff = gensymff(1);
+let symfg = symff("g");
+
+console.log(symfg());
+console.log(symfg());
+console.log(symfg());
+
+console.log("------------fibonaccif----------");
+function fibonaccif(first, second) {
+  return function () {
+    let sum = 0;
+    let oldFirst = 0;
+    switch (first) {
+      case 0:
+        oldFirst = first;
+        first = second;
+        second = oldFirst + first;
+        return oldFirst;
+      case 1:
+        oldFirst = first;
+        first = second;
+        second = oldFirst + first;
+        return oldFirst;
+      default:
+        oldFirst = first;
+        first = second;
+        second = oldFirst + first;
+        return oldFirst;
+    }
+  }
+}
+
+let fib = fibonaccif(0,1);
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+console.log(fib());
+
+console.log("------------counter----------");
+function counter() {
+  let count = 0;
+  const add1 = curry(add, 1);
+  const sub1 = curryr(sub, 1);
+  return {
+    up: function up() {
+      count += 1
+      return count
+    },
+    down: function up() {
+      count -= 1
+      return count
+    }
+  }
+}
+let object = counter();
+let up = object.up;
+let down = object.down;
+
+console.log(up());
+console.log(down());
+console.log(down());
+console.log(up());
+
+console.log("------------revocable----------");
+function revocable(f) {
+  let func = f
+  return {
+    invoke: function (a, b) {
+      if (func === undefined) {
+        return undefined;
+      }
+      return func(a, b);
+    },
+    revoke: function () {
+      func = undefined;
+      return;
+    }
+  };
+}
+
+object = revocable(add);
+add_rev = object.invoke;
+console.log(add_rev(3, 4));
+console.log(add_rev(8, 4));
+console.log(add_rev(9, 4));
+object.revoke();
+console.log(add_rev(3, 4));
+
+console.log("------------m----------");
+function m(value, source) {
+  return {
+    value: value,
+    source: (typeof source === "string")
+            ? source
+            : String(value)
+  };
+}
+
+console.log(JSON.stringify(m(1)));
+
+console.log("------------addm----------");
+function addm(func1, func2) {
+  return m(func1.value + func2.value, `(${func1.source} + ${func2.source})`);
+}
+
+console.log(JSON.stringify(addm(m(1), m(2))));
+console.log(JSON.stringify(addm(m(Math.PI, "pi"), m(2))));
+
+console.log("------------liftm----------");
+function liftm(func, symbol) {
+  return function (a, b) {
+    if (typeof a === "number") {
+      a = m(a)
+    }
+    if (typeof b === "number") {
+      b = m(b)
+    }
+    return m(func(a.value, b.value), `(${a.source} ${symbol} ${b.source})`);
+  }
+}
+
+let addmm = liftm(add, "+");
+console.log(JSON.stringify(addmm(m(1), m(2))));
+console.log(JSON.stringify(addmm(1, 2)));
+let mulmm = liftm(mul, "*");
+console.log(JSON.stringify(mulmm(m(4), m(2))));
+let submm = liftm(sub, "-");
+console.log(JSON.stringify(submm(m(2), m(4))));
+
+console.log("------------exp----------");
+function exp(array) {
+  if (Array.isArray(array)) {
+    func = array[0];
+    return func(...array.slice(1).map(exp));
+  }else{
+    return array;
+  }
+  
+}
+let sae = [mul, 5, 11];
+console.log(exp(sae));
+//console.log(exp([add, 4]));
+console.log(exp(42));
+let nsae = [
+  Math.sqrt,
+  [
+    add,
+    [square, 3],
+    [square, 4]
+  ]
+];
+console.log(exp(nsae));
+
+console.log("------------addg----------");
+function addg(a) {
+  if (a === undefined) {
+    return;
+  }
+  let num = a;
+  return function addg2(num2) {
+    if(num2 === undefined){
+      return num;
+    }
+    num += num2;
+    return addg2;
+  };
+}
+
+console.log(addg());
+console.log(addg(2)());
+console.log(addg(2)(7)());
+console.log(addg(3)(0)(4)());
+console.log(addg(1)(2)(4)(8)());
