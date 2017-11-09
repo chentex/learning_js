@@ -153,3 +153,219 @@ function reverse(func) {
 
 const bus = reverse(sub);
 console.log(bus(3, 2));
+
+function composeu(func1, func2) {
+  if (typeof func1 !== "function") {
+    throw Error("not a function")
+  }
+  if (typeof func2 !== "function") {
+    throw Error("not a function")
+  }
+  return function (a) {
+    if (!isFinite(a)) {
+      throw Error("not number");
+    }
+    return func2(func1(a));
+  }
+}
+
+console.log(composeu(double, square)(5));
+
+function composeb(func1, func2) {
+  if (typeof func1 !== "function") {
+    throw Error("not a function")
+  }
+  if (typeof func2 !== "function") {
+    throw Error("not a function")
+  }
+  return function (...args) {
+    args.forEach(element => {
+      if (!isFinite(element)) {
+        throw Error(`${element} not number`)
+      }
+    });
+    return func2(func1(args[0],args[1]), args[2])
+  }
+}
+
+console.log(composeb(add, mul)(2,3,7));
+console.log(composeb(add, mul)(5,3,7));
+
+function limit(func, times) {
+  var cont = 0;
+  return function (a, b) {
+    if (cont < times) {
+      cont += 1;      
+      return func(a, b);
+    } else {
+      return undefined;
+    }
+  }
+}
+
+const add_ltd = limit(add, 2)
+console.log(add_ltd(3, 4));
+console.log(add_ltd(3, 4));
+console.log(add_ltd(3, 4));
+
+function from(arg) {
+  var next = arg - 1;
+  return function () {
+    next += 1;
+    return next;
+  }
+}
+
+// const gen = from(0);
+// console.log(gen());
+// console.log(gen());
+// console.log(gen());
+
+function to(func, limit) {
+  return function () {
+    const value = func();
+    if (value < limit) {
+      return value
+    }
+  } 
+}
+
+// const gen = to(from(3), 5);
+// console.log(gen());
+// console.log(gen());
+// console.log(gen());
+
+function fromTo(begin, end) {
+  return to(
+    from(begin), 
+    end)
+  ;
+}
+
+// const gen = fromTo(0, 3);
+// console.log(gen());
+// console.log(gen());
+// console.log(gen());
+// console.log(gen());
+
+console.log("-------------element----------");
+function element(array, gen) {
+  if (gen === undefined) {
+    gen = fromTo(0, array.length);
+  }
+  return function () {
+    const index = gen();
+    if (index !== undefined) {
+      return array[index];  
+    }
+  }
+}
+
+let gen = element(
+              ["a", "b", "c", "d", "e"],
+              fromTo(1,4)
+            )
+
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+
+gen = element(
+              ["a", "b", "c", "d", "e"]
+            )
+
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+
+console.log("------------collect----------");
+let array = []
+function collect(gen, arr) {
+  return function () {
+    const index = gen();
+    if (index !== undefined) {
+        array.push(index);
+    }
+    return index;
+  }
+}
+
+gen = collect(fromTo(0,3), array);
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(array);
+
+console.log("------------filter----------");
+function filter(gen, filter) {
+  return function () {
+    let index;
+    while (!filter(index)) {
+      index = gen();
+      if (index === undefined){
+        return index;
+      }
+    }
+    return index
+  }
+}
+
+gen = filter(fromTo(0,5),
+      function third(a) {
+        return (a % 3) === 0;
+      })
+
+console.log(gen());
+console.log(gen());
+console.log(gen());
+
+console.log("------------concat----------");
+function concat(gen1, gen2) {
+  let gen = gen1;
+  return function () {
+    const index1 = gen();
+    if (index1 !== undefined) {
+      return index1;
+    }
+    gen = gen2;
+    return gen();
+  }
+}
+
+gen = concat(fromTo(0, 3), fromTo(0, 2));
+
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+console.log(gen());
+
+console.log("------------gensymf----------");
+function gensymf(symbol) {
+  let next = 0;
+  return function name() {
+    next += 1;
+    return `${symbol}${next}`;
+  }
+}
+
+let genh = gensymf("h");
+let geng = gensymf("g");
+console.log(geng());
+console.log(geng());
+console.log(geng());
+console.log(geng());
+console.log(genh());
+console.log(geng());
+console.log(genh());
+console.log(geng());
+console.log(genh());
+console.log(geng());
+console.log(genh());
