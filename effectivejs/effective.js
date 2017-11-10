@@ -559,3 +559,67 @@ console.log(addg(2)());
 console.log(addg(2)(7)());
 console.log(addg(3)(0)(4)());
 console.log(addg(1)(2)(4)(8)());
+
+console.log("------------liftg----------");
+function liftg(func) {
+  return function lifth(a) {
+    if (a === undefined) {
+      return undefined;
+    }
+    num = a;
+    return function lifti(b) {
+      if (b === undefined) {
+        return num;
+      }
+      num = func(num, b);
+      return lifti;
+    }
+  }
+}
+
+console.log(liftg(mul)());
+console.log(liftg(mul)(3)());
+console.log(liftg(mul)(3)(0)(4)());
+console.log(liftg(mul)(1)(2)(4)(8)());
+console.log(liftg(mul)(1)(2)(3)(4)());
+console.log(liftg(add)(1)(2)(3)(4)());
+
+console.log("------------composeug----------");
+let composeug = liftg(composeu)
+
+console.log(composeug(double)(square)(Math.sqrt)()(5));
+
+console.log("------------arrayg----------");
+function arrayg(val) {
+  let array = [];
+  if (val === undefined) {
+    return array;
+  }
+  array.push(val);;
+  return function arrayh(a){
+    if (a === undefined) {
+      return array;
+    }
+    array.push(a);
+    return arrayh;
+  }
+}
+
+console.log(arrayg());
+console.log(arrayg(3)());
+console.log(arrayg(3)(4)());
+console.log(arrayg(3)(4)(5)());
+
+console.log("------------continuize----------");
+function continuize(func) {
+  return function (callback, ...args) {
+    return callback(func(...args))
+  }
+}
+
+let sqrtc = continuize(Math.sqrt);
+sqrtc(console.log, 81);
+// sqrtc(alert, 81);
+
+console.log("----------------------");
+
