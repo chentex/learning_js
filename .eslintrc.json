@@ -9,14 +9,15 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "sourceType": "module"
+        "sourceType": "script"
     },
     "rules": {
+        "semi": "error",
         "no-const-assign": "warn",
         "no-this-before-super": "warn",
         "no-undef": "warn",
         "no-unreachable": "warn",
-        "no-unused-vars": "warn",
+        "no-unused-vars": "error",
         "constructor-super": "warn",
         "valid-typeof": "warn"
     }
