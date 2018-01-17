@@ -5,6 +5,8 @@ A little project for beginners to learn the basics oa JavaScript language.
 ## How it's organized
 
 * Lesson 01: Variables basics. [here](./lesson01.js)
+* Lesson 02: Objects. [here](./lesson02.js)
+* Lesson 03: Arrays. [here](./lesson03.js)
 
 ## How to run examples
 

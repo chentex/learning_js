@@ -5,6 +5,8 @@ Un pequeño proyecto para principiantes que quieran aprender lo básico del leng
 ## ¿Cómo está organizado?
 
 * Lesson 01: Variables, lo básico. [acá](./lesson01.js)
+* Lesson 02: Objetos. [here](./lesson02.js)
+* Lesson 03: Arreglos. [here](./lesson03.js)
 
 ## ¿Cómo ejecutar los ejemplos?
 

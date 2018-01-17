@@ -62,4 +62,4 @@ console.log(`d = ${d}`);
 // === compares value and type
 // never use ==
 console.log(8 == '8'); // this results true
-console.log(8 === '8'); // this results false, that's wa we want.
+console.log(8 === '8'); // this results false, that's what we want.
